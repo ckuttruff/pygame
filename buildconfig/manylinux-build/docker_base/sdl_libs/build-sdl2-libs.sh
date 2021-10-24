@@ -28,7 +28,7 @@ tar xzf ${SDL2}.tar.gz
 # mv SDL-* ${SDL2}
 
 cd $SDL2
-./configure --disable-video-vulkan
+./configure --disable-video-vulkan $ARCHS_CONFIG_FLAG
 make
 make install
 
@@ -57,7 +57,8 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 ./configure --enable-png --disable-png-shared --enable-jpg --disable-jpg-shared \
-        --enable-tif --disable-tif-shared --enable-webp --disable-webp-shared $SDL_IMAGE_CONFIGURE
+        --enable-tif --disable-tif-shared --enable-webp --disable-webp-shared \
+        $SDL_IMAGE_CONFIGURE $ARCHS_CONFIG_FLAG
 make
 make install
 
@@ -71,7 +72,7 @@ cd ..
 # Build SDL_ttf
 tar xzf ${TTF2}.tar.gz
 cd $TTF2
-./configure
+./configure $ARCHS_CONFIG_FLAG
 make
 make install
 
@@ -86,13 +87,20 @@ cd ..
 # Build SDL_mixer
 tar xzf ${MIX2}.tar.gz
 cd $MIX2
+
+if [[ "$MAC_ARCH" == "arm64" ]]; then
+    # We don't build these libs on arm64 yet
+    export SDL_MIXER_DEPS_FLAGS=--disable-music-midi-fluidsynth --disable-music-mp3-mpg123
+else
+    export SDL_MIXER_DEPS_FLAGS=--enable-music-midi-fluidsynth --enable-music-mp3-mpg123
+fi
+
 # The --disable-x-shared flags make it use standard dynamic linking rather than
 # dlopen-ing the library itself. This is important for when auditwheel moves
 # libraries into the wheel.
-./configure \
+./configure $ARCHS_CONFIG_FLAG $SDL_MIXER_DEPS_FLAGS \
       --disable-dependency-tracking \
       --disable-music-flac-shared \
-      --disable-music-midi-fluidsynth \
       --disable-music-midi-fluidsynth-shared \
       --disable-music-mod-mikmod-shared \
       --disable-music-mod-modplug-shared \
@@ -103,8 +111,7 @@ cd $MIX2
       --enable-music-ogg \
       --enable-music-flac \
       --enable-music-mp3 \
-      --enable-music-mp3-mpg123 \
-      --enable-music-mod \
+      --enable-music-mod
 
 make
 make install

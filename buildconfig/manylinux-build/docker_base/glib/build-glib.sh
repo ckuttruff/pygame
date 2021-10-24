@@ -12,7 +12,7 @@ unxz ${GLIB}.tar.xz
 tar xzf ${GLIB}.tar
 cd $GLIB
 
-./configure --with-pcre=internal
+./configure $ARCHS_CONFIG_FLAG --with-pcre=internal
 make
 make install
 

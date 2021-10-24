@@ -15,6 +15,7 @@ rm -rf /usr/local/opt/git
 ln -s /usr/bin/git /usr/local/bin/git
 
 rm -rf /usr/local/lib/libtiff*
+rm -rf /usr/local/lib/libwebp*
 rm -rf /usr/local/lib/libsndfile*
 rm -rf /usr/local/lib/glib*
 rm -rf /usr/local/lib/libglib*
