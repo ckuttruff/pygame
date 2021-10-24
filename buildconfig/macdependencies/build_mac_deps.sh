@@ -24,7 +24,7 @@ if [[ "$MAC_ARCH" == "arm64" ]]; then
     export CXX="clang++ -target arm64-apple-macos11.0"
 
     # This does not do anything actually, but without this ./configure errors
-    export ARCHS_CONFIG_FLAG="--host=arm64-apple-macos20.0.0"
+    export ARCHS_CONFIG_FLAG="--host=aarch64-apple-macos20.0.0"
     
     export ARCHS_CONFIG_CMAKE_FLAG="-DCMAKE_OSX_ARCHITECTURES=arm64"
 
